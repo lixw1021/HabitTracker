@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void insertData() {
+    public void insertData() {
         SQLiteDatabase db = habitDbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -44,14 +44,9 @@ public class MainActivity extends AppCompatActivity {
         db.insert(HabitEntry.TABLE_NAME, null, values);
     }
 
-    void displayData() {
-        SQLiteDatabase db = habitDbHelper.getReadableDatabase();
-        String[] project = {HabitEntry._ID,
-                            HabitEntry.COLUMN_TYPE,
-                            HabitEntry.COLUMN_TIME,
-                            HabitEntry.COLUMN_NOTE};
-
-        Cursor cursor = db.query(HabitEntry.TABLE_NAME, project, null, null, null, null, null);
+    public void displayData() {
+        Cursor cursor;
+        cursor = readData();
 
         try {
             int idIndex = cursor.getColumnIndex(HabitEntry._ID);
@@ -73,5 +68,15 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             cursor.close();
         }
+    }
+
+    public Cursor readData () {
+        SQLiteDatabase db = habitDbHelper.getReadableDatabase();
+        String[] project = {HabitEntry._ID,
+                HabitEntry.COLUMN_TYPE,
+                HabitEntry.COLUMN_TIME,
+                HabitEntry.COLUMN_NOTE};
+
+        return db.query(HabitEntry.TABLE_NAME, project, null, null, null, null, null);
     }
 }
